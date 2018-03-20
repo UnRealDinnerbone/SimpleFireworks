@@ -1,0 +1,103 @@
+buildscript {
+	repositories {
+		jcenter()
+        maven {
+			url = "http://files.minecraftforge.net/maven"
+		}
+        maven {
+			url = "https://plugins.gradle.org/m2/"
+		}
+	}
+	dependencies {
+		classpath 'net.minecraftforge.gradle:ForgeGradle:+'
+        classpath "gradle.plugin.com.matthewprenger:CurseGradle:+"
+	}
+}
+
+apply plugin: 'maven'
+apply plugin: "com.matthewprenger.cursegradle"
+apply plugin: 'net.minecraftforge.gradle.forge'
+
+version = "${minecraft_version}-${mod_verison}-universal"
+group= "com.unrealdinnerbone.${mod_name}"
+archivesBaseName = "${mod_name}"
+
+sourceCompatibility = JavaVersion.VERSION_1_8
+targetCompatibility = JavaVersion.VERSION_1_8
+
+minecraft {
+    version = "${minecraft_version}-${forge_version}"
+    runDir = "run"
+    mappings = "${forge_mappings}"
+    useDepAts = true
+}
+
+processResources
+{
+	inputs.property "version", project.version
+	inputs.property "mcversion", project.minecraft.version
+
+	from(sourceSets.main.resources.srcDirs)
+	{
+		include 'mcmod.info'
+		expand 'version':project.version, 'mcversion':project.minecraft.version
+	}
+	from(sourceSets.main.resources.srcDirs)
+	{
+		exclude 'mcmod.info'
+	}
+	rename '(.+_at.cfg)', 'META-INF/$1'
+}
+
+repositories {
+
+	maven {
+		name = "tterrag maven"
+		url = "http://maven.tterrag.com/"
+	}
+	maven {
+		name = "CoFH Maven"
+		url = "http://maven.covers1624.net"
+	}
+	maven {
+		name = "Class"
+		url = "https://oss.sonatype.org/content/groups/public/"
+	}
+
+}
+
+configurations {
+	shade
+	compile.extendsFrom shade
+}
+
+dependencies {
+	deobfCompile "mcjty.theoneprobe:TheOneProbe-1.12:+"
+	deobfCompile "cofh:RedstoneFlux:+:universal"
+}
+
+
+jar {
+	configurations.shade.each { dep ->
+		from(project.zipTree(dep)){
+			exclude 'META-INF', 'META-INF/**'
+		}
+	}
+	manifest {
+		attributes 'FMLAT': 'yaum_at.cfg'
+	}
+}
+
+
+curseforge {
+    apiKey = project.curse_api_key
+    project {
+		id = project.curse_project_id
+		changelogType = "markdown"
+		changelog = file('changelog.md')
+		releaseType = project.release_type
+		mainArtifact(jar) {
+            displayName = "${mod_name}-${minecraft_version}-${mod_verison}-universal"
+        }
+    }
+}

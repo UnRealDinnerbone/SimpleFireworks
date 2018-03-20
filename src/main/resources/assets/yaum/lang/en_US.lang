@@ -1,0 +1,9 @@
+yarm.config.client=Client
+yarm.config.client.tooltip=Client Configs
+yarm.config.client.supporters=Supporters
+yaum.config.client.supporters.tooltip=Supporters Config
+
+yarm.config.general=General
+yarm.config.general.tooltip=General Configs
+yarm.config.general.supporters=Supporters
+yarm.config.general.supporters.tooltip=Supporters Config
