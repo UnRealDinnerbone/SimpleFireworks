@@ -49,44 +49,6 @@ processResources
 	rename '(.+_at.cfg)', 'META-INF/$1'
 }
 
-repositories {
-
-	maven {
-		name = "tterrag maven"
-		url = "http://maven.tterrag.com/"
-	}
-	maven {
-		name = "CoFH Maven"
-		url = "http://maven.covers1624.net"
-	}
-	maven {
-		name = "Class"
-		url = "https://oss.sonatype.org/content/groups/public/"
-	}
-
-}
-
-configurations {
-	shade
-	compile.extendsFrom shade
-}
-
-dependencies {
-	deobfCompile "mcjty.theoneprobe:TheOneProbe-1.12:+"
-	deobfCompile "cofh:RedstoneFlux:+:universal"
-}
-
-
-jar {
-	configurations.shade.each { dep ->
-		from(project.zipTree(dep)){
-			exclude 'META-INF', 'META-INF/**'
-		}
-	}
-	manifest {
-		attributes 'FMLAT': 'yaum_at.cfg'
-	}
-}
 
 
 curseforge {

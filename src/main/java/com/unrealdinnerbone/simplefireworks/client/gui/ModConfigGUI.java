@@ -4,6 +4,7 @@ import com.unrealdinnerbone.simplefireworks.lib.Reference;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraftforge.fml.client.IModGuiFactory;
+import net.minecraftforge.fml.client.config.GuiConfig;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -25,7 +26,7 @@ public class ModConfigGUI implements IModGuiFactory
   @SideOnly(Side.CLIENT)
   @Override
   public GuiScreen createConfigGui(GuiScreen guiScreen) {
-    return new ModGuiConfig(guiScreen, Reference.MOD_ID, Reference.MOD_NAME);
+    return new GuiConfig(guiScreen, Reference.MOD_ID, Reference.MOD_NAME);
   }
 
   @Override

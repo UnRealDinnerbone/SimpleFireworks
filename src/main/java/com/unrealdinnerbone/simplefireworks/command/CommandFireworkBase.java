@@ -27,13 +27,4 @@ public class CommandFireworkBase extends CommandTreeBase {
         return 2;
     }
 
-
-    @Override
-    public boolean checkPermission(MinecraftServer minecraftServer, ICommandSender sender)
-    {
-        return true;
-    }
-
-
-
 }
