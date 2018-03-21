@@ -9,6 +9,7 @@ public class CommandFireworkBase extends CommandTreeBase {
 
     public CommandFireworkBase() {
         this.addSubcommand(new CommandSpawnFTBLogo());
+        this.addSubcommand(new CommandSpawnLetter());
     }
 
     @Override

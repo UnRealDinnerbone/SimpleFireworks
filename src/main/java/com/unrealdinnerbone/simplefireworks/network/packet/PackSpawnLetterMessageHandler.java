@@ -4,6 +4,7 @@ import com.unrealdinnerbone.simplefireworks.SimpleFirework;
 import com.unrealdinnerbone.simplefireworks.lib.firework.FireworkLetter;
 import com.unrealdinnerbone.simplefireworks.lib.firework.Firework;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3i;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
@@ -22,18 +23,17 @@ public class PackSpawnLetterMessageHandler implements IMessageHandler<PacketSpaw
             SimpleFirework.LOG_HELPER.error("Someone Tired to spawn a letter " +  message.getFireworkObjectKey() + " it has not been defined ");
             return null;
         }
-        BlockPos pos = message.getBlockPos();
+        BlockPos pos = message.getBlockPos().add(0, pattern.length * 5, 0);
 
-        pos =  pos.add(0,pattern.length * 5, 0);
         for(String[] row : pattern){
             pos = pos.add(0,-5, 0);
             for(String s : row) {
                 if(!s.equalsIgnoreCase(" ")) {
                     firework.spawnFirework(pos, 0,0,0);
                 }
-                pos = pos.add(5, 0, 0);
+                pos = pos.add(message.getFacing().getFrontOffsetX() * 5, 0, message.getFacing().getFrontOffsetZ() * 5);
             }
-            pos = pos.add(row.length * -5, 0, 0);
+            pos = pos.add(row.length * -5 * message.getFacing().getFrontOffsetX(), 0, row.length * -5 * message.getFacing().getFrontOffsetZ());
         }
         return null;
     }

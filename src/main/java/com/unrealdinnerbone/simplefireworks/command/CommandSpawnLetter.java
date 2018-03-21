@@ -2,18 +2,13 @@ package com.unrealdinnerbone.simplefireworks.command;
 
 import com.unrealdinnerbone.simplefireworks.config.FireworkConfig;
 import com.unrealdinnerbone.simplefireworks.lib.FireworkHelper;
-import com.unrealdinnerbone.simplefireworks.lib.firework.EnumExplodeEffect;
-import com.unrealdinnerbone.simplefireworks.lib.firework.EnumFireworkEffect;
-import com.unrealdinnerbone.simplefireworks.lib.firework.FireworkColor;
-import net.minecraft.command.CommandBase;
+import com.unrealdinnerbone.simplefireworks.lib.firework.*;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.NumberInvalidException;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.tileentity.CommandBlockBaseLogic;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.TextComponentString;
 
 import javax.annotation.Nullable;
@@ -24,7 +19,7 @@ import java.util.List;
 
 
 //Todo Better Command Logic
-public class CommandSpawnFTBLogo extends FireworkCommandBase {
+public class CommandSpawnLetter extends FireworkCommandBase {
 
     private List<FireworkColor> red = new ArrayList<>();
     private List<FireworkColor> green = new ArrayList<>();
@@ -33,7 +28,7 @@ public class CommandSpawnFTBLogo extends FireworkCommandBase {
     private List<String> facing = new ArrayList<>();
     private List<String> trueFalse = new ArrayList<>();
 
-    public CommandSpawnFTBLogo() {
+    public CommandSpawnLetter() {
         red.add(new FireworkColor(16711680));
         green.add(new FireworkColor(65280));
         blue.add(new FireworkColor(255));
@@ -46,22 +41,27 @@ public class CommandSpawnFTBLogo extends FireworkCommandBase {
 
     @Override
     public String getName() {
-        return "spawnFTB";
+        return "spawnLetter";
     }
 
     @Override
     public void execute(MinecraftServer minecraftServer, ICommandSender iCommandSender, String[] strings) {
-        if(strings.length >= 4) {
+        if(strings.length >= 5) {
+            String letter = strings[0];
+            if(!FireworkLetter.ALL.contains(letter)){
+                iCommandSender.sendMessage(new TextComponentString("THE LETTER IS NOT THERE"));
+                return;
+            }
             boolean showCenter = false;
-            if(strings.length == 5) {
+            if(strings.length == 6) {
                 try {
-                    showCenter = parseBoolean(strings[4]);
+                    showCenter = parseBoolean(strings[5]);
                 } catch (CommandException e) {
                     iCommandSender.sendMessage(new TextComponentString("error boolean must be true/false"));
                     return;
                 }
             }
-            EnumFacing facing = EnumFacing.byName(strings[0]);
+            EnumFacing facing = EnumFacing.byName(strings[1]);
             if(facing == null) {
                 iCommandSender.sendMessage(new TextComponentString(getUsage(iCommandSender)));
                 return;
@@ -73,7 +73,7 @@ public class CommandSpawnFTBLogo extends FireworkCommandBase {
 
             BlockPos basPos;
             try {
-                basPos = getBlockPosFormArgs(iCommandSender.getPositionVector(), strings, 1);
+                basPos = getBlockPosFormArgs(iCommandSender.getPositionVector(), strings, 2);
             } catch (NumberInvalidException e) {
                 iCommandSender.sendMessage(new TextComponentString("Error values must be doubles"));
                 return;
@@ -84,9 +84,7 @@ public class CommandSpawnFTBLogo extends FireworkCommandBase {
                 FireworkHelper.spawnFireworkObject("TEST", basPos, iCommandSender.getEntityWorld().provider.getDimension(), EnumExplodeEffect.SPARKLE, facing, red, blue, effects);
             }
 
-            FireworkHelper.spawnFireworkObject("F", basPos.add(facing.getFrontOffsetX() * -15, 0, facing.getFrontOffsetZ() * -15), iCommandSender.getEntityWorld().provider.getDimension(), FireworkConfig.general.enumExplodeEffect, facing, red, red, effects);
-            FireworkHelper.spawnFireworkObject("T", basPos.add(0, 15, 0), iCommandSender.getEntityWorld().provider.getDimension(), FireworkConfig.general.enumExplodeEffect, facing, green, green, effects);
-            FireworkHelper.spawnFireworkObject("B", basPos.add(facing.getFrontOffsetX() * 15, 0, facing.getFrontOffsetZ() * 15), iCommandSender.getEntityWorld().provider.getDimension(), FireworkConfig.general.enumExplodeEffect, facing, blue, blue, effects);
+            FireworkHelper.spawnFireworkObject(letter, basPos.add(facing.getFrontOffsetX() * -15, 0, facing.getFrontOffsetZ() * -15), iCommandSender.getEntityWorld().provider.getDimension(), FireworkConfig.general.enumExplodeEffect, facing, red, red, effects);
         }else {
             iCommandSender.sendMessage(new TextComponentString(getUsage(iCommandSender)));
         }
@@ -95,11 +93,12 @@ public class CommandSpawnFTBLogo extends FireworkCommandBase {
     @Override
     public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos targetPos) {
         switch (args.length) {
-            case 1: return getListOfStringsMatchingLastWord(args, facing);
-            case 2: return Collections.singletonList(sender.getPosition().getX() + "");
-            case 3: return Collections.singletonList(sender.getPosition().getY() + "");
-            case 4: return Collections.singletonList(sender.getPosition().getZ() + "");
-            case 5: return getListOfStringsMatchingLastWord(args, trueFalse);
+            case 1: return getListOfStringsMatchingLastWord(args, FireworkLetter.ALL);
+            case 2: return getListOfStringsMatchingLastWord(args, facing);
+            case 3: return Collections.singletonList(sender.getPosition().getX() + "");
+            case 4: return Collections.singletonList(sender.getPosition().getY() + "");
+            case 5: return Collections.singletonList(sender.getPosition().getZ() + "");
+            case 6: return getListOfStringsMatchingLastWord(args, trueFalse);
             default: return Collections.emptyList();
         }
     }

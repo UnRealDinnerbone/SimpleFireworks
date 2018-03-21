@@ -1,9 +1,11 @@
 package com.unrealdinnerbone.simplefireworks.network.packet;
 
+import com.unrealdinnerbone.simplefireworks.lib.FacingUtil;
 import com.unrealdinnerbone.simplefireworks.lib.firework.EnumExplodeEffect;
 import com.unrealdinnerbone.simplefireworks.lib.firework.EnumFireworkEffect;
 import com.unrealdinnerbone.simplefireworks.lib.firework.FireworkColor;
 import io.netty.buffer.ByteBuf;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 
@@ -19,21 +21,24 @@ public class PacketSpawnLetter implements IMessage {
     private BlockPos blockPos;
     private CharSequence fireworkObjectKey;
     private EnumExplodeEffect enumExplodeEffect;
+    private EnumFacing facing;
 
     public PacketSpawnLetter() {  }
 
 
-    public PacketSpawnLetter(String fireworkObjectKey, BlockPos blockPos, EnumExplodeEffect enumExplodeEffect, List<FireworkColor> colors, List<FireworkColor> fadeColors, List<EnumFireworkEffect> effects) {
+    public PacketSpawnLetter(String fireworkObjectKey, BlockPos blockPos, EnumExplodeEffect enumExplodeEffect, EnumFacing facing, List<FireworkColor> colors, List<FireworkColor> fadeColors, List<EnumFireworkEffect> effects) {
         this.blockPos = blockPos;
         this.fireworkObjectKey = fireworkObjectKey;
         this.colors = colors;
         this.fadeColors = fadeColors;
         this.enumExplodeEffect = enumExplodeEffect;
+        this.facing = facing;
         this.enumFireworkEffects = effects;
     }
 
     @Override
     public void fromBytes(ByteBuf buf) {
+        this.facing = FacingUtil.getFacingFormID(buf.readInt());
         this.enumExplodeEffect = EnumExplodeEffect.getEffectFormID(buf.readInt());
         blockPos = new BlockPos(buf.readInt(), buf.readInt(), buf.readInt());
         fireworkObjectKey = buf.readCharSequence(buf.readInt(), Charset.forName("utf-8"));
@@ -59,6 +64,7 @@ public class PacketSpawnLetter implements IMessage {
 
     @Override
     public void toBytes(ByteBuf buf) {
+        buf.writeInt(facing.getIndex());
         buf.writeInt(enumExplodeEffect.getExplodeID());
         buf.writeInt(blockPos.getX());
         buf.writeInt(blockPos.getY());
@@ -101,5 +107,9 @@ public class PacketSpawnLetter implements IMessage {
 
     public List<EnumFireworkEffect> getEnumFireworkEffects() {
         return enumFireworkEffects;
+    }
+
+    public EnumFacing getFacing() {
+        return facing;
     }
 }

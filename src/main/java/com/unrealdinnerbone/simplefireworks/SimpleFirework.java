@@ -2,6 +2,7 @@ package com.unrealdinnerbone.simplefireworks;
 
 import com.unrealdinnerbone.simplefireworks.command.CommandFireworkBase;
 import com.unrealdinnerbone.simplefireworks.command.CommandSpawnFTBLogo;
+import com.unrealdinnerbone.simplefireworks.command.CommandSpawnLetter;
 import com.unrealdinnerbone.simplefireworks.lib.LogHelper;
 import com.unrealdinnerbone.simplefireworks.lib.Reference;
 import com.unrealdinnerbone.simplefireworks.network.NetworkManager;
@@ -35,6 +36,7 @@ public class SimpleFirework {
     public static void onServerStart(FMLServerStartingEvent event) {
         event.registerServerCommand(new CommandFireworkBase());
         event.registerServerCommand(new CommandSpawnFTBLogo());
+        event.registerServerCommand(new CommandSpawnLetter());
 
         NetworkManager.INSTANCE.registerMessage(PackSpawnLetterMessageHandler.class, PacketSpawnLetter.class, 0, Side.CLIENT);
 
