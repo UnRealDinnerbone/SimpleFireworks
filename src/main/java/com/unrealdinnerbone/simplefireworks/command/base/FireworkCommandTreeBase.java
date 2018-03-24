@@ -1,26 +1,28 @@
-package com.unrealdinnerbone.simplefireworks.command;
+package com.unrealdinnerbone.simplefireworks.command.base;
 
-import com.unrealdinnerbone.simplefireworks.command.spawn.CommandSpawnFireworkObject;
+import com.unrealdinnerbone.simplefireworks.lib.Reference;
 import net.minecraft.command.ICommandSender;
 import net.minecraftforge.server.command.CommandTreeBase;
 
-public class CommandFireworkBase extends CommandTreeBase {
+public abstract class FireworkCommandTreeBase extends CommandTreeBase {
 
+    private final String name;
 
-    public CommandFireworkBase() {
-        this.addSubcommand(new CommandSpawnFireworkObject());
-//        this.addSubcommand(new CommandSpawnFTBLogo());
-//        this.addSubcommand(new CommandSpawnLetter());
+    public FireworkCommandTreeBase(String name) {
+        this.name = name;
+        addSubCommands();
     }
+
+    public abstract void addSubCommands();
 
     @Override
     public String getName() {
-        return "simplefirework";
+        return name;
     }
 
     @Override
     public String getUsage(ICommandSender sender) {
-        return getName();
+        return Reference.MOD_ID + "commands." + getName() + ".usage";
     }
 
     @Override

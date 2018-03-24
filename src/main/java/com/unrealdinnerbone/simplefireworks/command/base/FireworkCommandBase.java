@@ -1,4 +1,4 @@
-package com.unrealdinnerbone.simplefireworks.command;
+package com.unrealdinnerbone.simplefireworks.command.base;
 
 import com.unrealdinnerbone.simplefireworks.lib.Reference;
 import net.minecraft.command.CommandBase;
@@ -38,4 +38,8 @@ public abstract class FireworkCommandBase extends CommandBase {
         return new BlockPos(parseDouble(base.x, args[xSpot], true), parseDouble(base.y, args[xSpot + 1], true), parseDouble(base.z, args[xSpot + 2], true));
     }
 
+    @Override
+    public int getRequiredPermissionLevel() {
+        return 2;
+    }
 }
