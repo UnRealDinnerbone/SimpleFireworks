@@ -16,5 +16,10 @@ public class MathHelper extends net.minecraft.util.math.MathHelper
     public static ThreadLocalRandom getRandom() {
         return ThreadLocalRandom.current();
     }
+
+
+    public static int getRandomHexColor() {
+        return getRandomInt(0, 16777215);
+    }
 }
 

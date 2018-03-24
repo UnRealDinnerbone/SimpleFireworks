@@ -1,9 +1,9 @@
-package com.unrealdinnerbone.simplefireworks.lib.firework;
+package com.unrealdinnerbone.simplefireworks.api.firework;
 
 public enum EnumExplodeEffect
 {
     SMALL_BALL(0),
-    LARAGE_BALL(2),
+    LAVAGE_BALL(2),
     STAR(3),
     CREEPER_FACE(4),
     SPARKLE(5);

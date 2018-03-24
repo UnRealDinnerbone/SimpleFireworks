@@ -1,7 +1,7 @@
 package com.unrealdinnerbone.simplefireworks.config;
 
 import com.unrealdinnerbone.simplefireworks.lib.Reference;
-import com.unrealdinnerbone.simplefireworks.lib.firework.EnumExplodeEffect;
+import com.unrealdinnerbone.simplefireworks.api.firework.EnumExplodeEffect;
 import net.minecraftforge.common.config.Config;
 import net.minecraftforge.common.config.ConfigManager;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;

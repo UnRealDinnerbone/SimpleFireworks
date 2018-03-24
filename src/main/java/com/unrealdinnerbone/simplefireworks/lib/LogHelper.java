@@ -16,7 +16,7 @@ public class LogHelper {
         logger = LogManager.getLogger(modid);
     }
 
-    private void log(Level logLevel, Object object) {
+    public void log(Level logLevel, Object object) {
 
         logger.log(logLevel, String.valueOf(object));
     }

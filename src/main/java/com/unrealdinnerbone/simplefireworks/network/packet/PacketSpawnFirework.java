@@ -1,9 +1,9 @@
 package com.unrealdinnerbone.simplefireworks.network.packet;
 
+import com.unrealdinnerbone.simplefireworks.api.firework.IFireworkObject;
 import com.unrealdinnerbone.simplefireworks.lib.FacingUtil;
-import com.unrealdinnerbone.simplefireworks.lib.firework.EnumExplodeEffect;
-import com.unrealdinnerbone.simplefireworks.lib.firework.EnumFireworkEffect;
-import com.unrealdinnerbone.simplefireworks.lib.firework.FireworkColor;
+import com.unrealdinnerbone.simplefireworks.api.firework.EnumExplodeEffect;
+import com.unrealdinnerbone.simplefireworks.api.firework.EnumFireworkEffect;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
@@ -13,20 +13,30 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PacketSpawnLetter implements IMessage {
+public class PacketSpawnFirework implements IMessage {
 
-    private List<FireworkColor> colors;
-    private List<FireworkColor> fadeColors;
+    private List<Integer> colors;
+    private List<Integer> fadeColors;
     private List<EnumFireworkEffect> enumFireworkEffects;
     private BlockPos blockPos;
     private CharSequence fireworkObjectKey;
     private EnumExplodeEffect enumExplodeEffect;
     private EnumFacing facing;
 
-    public PacketSpawnLetter() {  }
+    public PacketSpawnFirework() {  }
 
 
-    public PacketSpawnLetter(String fireworkObjectKey, BlockPos blockPos, EnumExplodeEffect enumExplodeEffect, EnumFacing facing, List<FireworkColor> colors, List<FireworkColor> fadeColors, List<EnumFireworkEffect> effects) {
+    public PacketSpawnFirework(String fireworkObjectKey, BlockPos blockPos, EnumExplodeEffect enumExplodeEffect, EnumFacing facing, List<Integer> colors, List<Integer> fadeColors, List<EnumFireworkEffect> effects) {
+        this.blockPos = blockPos;
+        this.fireworkObjectKey = fireworkObjectKey;
+        this.colors = colors;
+        this.fadeColors = fadeColors;
+        this.enumExplodeEffect = enumExplodeEffect;
+        this.facing = facing;
+        this.enumFireworkEffects = effects;
+    }
+
+    public PacketSpawnFirework(IFireworkObject lettter, BlockPos blockPos, EnumExplodeEffect enumExplodeEffect, EnumFacing facing, List<Integer> colors, List<Integer> fadeColors, List<EnumFireworkEffect> effects) {
         this.blockPos = blockPos;
         this.fireworkObjectKey = fireworkObjectKey;
         this.colors = colors;
@@ -50,11 +60,11 @@ public class PacketSpawnLetter implements IMessage {
         enumFireworkEffects = new ArrayList<>();
 
         for(int x = 1; x <= colorsX; x++) {
-            colors.add(new FireworkColor(buf.readInt()));
+            colors.add(buf.readInt());
         }
 
         for(int x = 1; x <= fadeColorsX; x++) {
-            fadeColors.add(new FireworkColor(buf.readInt()));
+            fadeColors.add(buf.readInt());
         }
 
         for(int x = 1; x <= fireworkEffectX; x++) {
@@ -74,26 +84,20 @@ public class PacketSpawnLetter implements IMessage {
         buf.writeInt(colors.size());
         buf.writeInt(fadeColors.size());
         buf.writeInt(enumFireworkEffects.size());
-        for(FireworkColor fireworkColor: colors) {
-            buf.writeInt(fireworkColor.getDecimalCode());
-        }
-        for(FireworkColor fireworkColor: fadeColors) {
-            buf.writeInt(fireworkColor.getDecimalCode());
-        }
-        for(EnumFireworkEffect fireworkEffect: enumFireworkEffects) {
-            buf.writeInt(fireworkEffect.getExplodeID());
-        }
+        colors.stream().mapToInt(Integer::intValue).forEach(buf::writeInt);
+        fadeColors.stream().mapToInt(Integer::intValue).forEach(buf::writeInt);
+        enumFireworkEffects.stream().mapToInt(EnumFireworkEffect::getExplodeID).forEach(buf::writeInt);
     }
 
     public BlockPos getBlockPos() {
         return blockPos;
     }
 
-    public List<FireworkColor> getFadeColors() {
+    public List<Integer> getFadeColors() {
         return fadeColors;
     }
 
-    public List<FireworkColor> getColors() {
+    public List<Integer> getColors() {
         return colors;
     }
 
