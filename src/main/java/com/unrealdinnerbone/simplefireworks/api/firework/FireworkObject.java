@@ -1,10 +1,8 @@
-package com.unrealdinnerbone.simplefireworks.firework;
-
-import com.unrealdinnerbone.simplefireworks.api.firework.IFireworkObject;
+package com.unrealdinnerbone.simplefireworks.api.firework;
 
 import java.util.HashMap;
 
-public class SimpleFireworkObject implements IFireworkObject {
+public class FireworkObject {
 
     private String id;
     private HashMap<String, String> identifiers;
@@ -23,18 +21,24 @@ public class SimpleFireworkObject implements IFireworkObject {
         this.id = id;
     }
 
-    @Override
     public String getID() {
         return id;
     }
 
-    @Override
     public HashMap<String, String> getIdentifiers() {
         return identifiers;
     }
 
-    @Override
-    public String[][] getObject() {
+    public String[][] getObjectArray() {
         return objects;
+    }
+
+    public String getFireworkNameFormIdentifier(String identifier) {
+        for(String key: identifiers.keySet()) {
+            if(key.equalsIgnoreCase(identifier)) {
+                return identifiers.get(key);
+            }
+        }
+        return null;
     }
 }

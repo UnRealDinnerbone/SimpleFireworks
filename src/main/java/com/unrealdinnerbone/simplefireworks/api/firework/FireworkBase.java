@@ -1,20 +1,23 @@
-package com.unrealdinnerbone.simplefireworks.firework;
+package com.unrealdinnerbone.simplefireworks.api.firework;
 
-import com.unrealdinnerbone.simplefireworks.api.firework.IFirework;
-import com.unrealdinnerbone.simplefireworks.api.firework.EnumExplodeEffect;
-import com.unrealdinnerbone.simplefireworks.api.firework.EnumFireworkEffect;
+import net.minecraft.client.Minecraft;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
+import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class SimpleFireworkBase implements IFirework {
+public class FireworkBase {
 
     private List<EnumFireworkEffect> fireworkEffects;
     private EnumExplodeEffect explodeEffect;
     private List<Integer> colors;
     private List<Integer> fadeColors;
 
-    public SimpleFireworkBase() {
+    public FireworkBase() {
         fireworkEffects = new ArrayList<>();
         explodeEffect = null;
         colors = new ArrayList<>();
@@ -68,24 +71,45 @@ public class SimpleFireworkBase implements IFirework {
         this.fadeColors.remove(fireworkColor);
     }
 
-    @Override
     public List<EnumFireworkEffect> getFireworkEffects() {
         return fireworkEffects;
     }
 
-    @Override
     public EnumExplodeEffect getExplodedEffect() {
         return explodeEffect;
     }
 
-    @Override
     public List<Integer> getBrustColors() {
         return colors;
     }
 
-    @Override
     public List<Integer> getFadeColors() {
         return fadeColors;
+    }
+
+    public NBTTagCompound getExplodeCompound()  {
+        NBTTagCompound compound = new NBTTagCompound();
+        //Todo do i need this?
+//        compound.setInteger("Flight", 1);
+        NBTTagCompound explosionsCompound = new NBTTagCompound();
+        explosionsCompound.setInteger("Type", getExplodedEffect().getExplodeID() - 1);
+        this.getFireworkEffects().forEach(effect -> explosionsCompound.setInteger(effect.getEffectName(), 1));
+
+        int burstColorsArray[] = getBrustColors().stream().mapToInt(Integer::intValue).toArray();
+        int fadeColorArray[] = getFadeColors().stream().mapToInt(Integer::intValue).toArray();
+
+        explosionsCompound.setIntArray("Colors", burstColorsArray);
+        explosionsCompound.setIntArray("FadeColors", fadeColorArray);
+        NBTTagList nbtList = new NBTTagList();
+        nbtList.appendTag(explosionsCompound);
+        compound.setTag("Explosions", nbtList);
+
+        return compound;
+    }
+
+    @SideOnly(Side.CLIENT)
+    public void spawnFirework(BlockPos pos, int xSpeed, int ySpeed, int zSpeed) {
+        Minecraft.getMinecraft().world.makeFireworks(pos.getX(), pos.getY(), pos.getZ(), xSpeed, ySpeed, zSpeed, getExplodeCompound());
     }
 }
 

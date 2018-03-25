@@ -1,9 +1,7 @@
 package com.unrealdinnerbone.simplefireworks.network.packet.local;
 
 import com.unrealdinnerbone.simplefireworks.SimpleFirework;
-import com.unrealdinnerbone.simplefireworks.api.firework.IFirework;
-import com.unrealdinnerbone.simplefireworks.api.firework.IFireworkObject;
-import com.unrealdinnerbone.simplefireworks.firework.SimpleFireworkBase;
+import com.unrealdinnerbone.simplefireworks.api.firework.FireworkObject;
 import com.unrealdinnerbone.simplefireworks.parsar.FireworkParser;
 import net.minecraft.network.play.server.SPacketChat;
 import net.minecraft.util.EnumFacing;
@@ -17,32 +15,33 @@ public class PacketSpawnFireworkObjectHandler implements IMessageHandler<PacketS
 
     @Override
     public IMessage onMessage(PacketSpawnFireworkObject message, MessageContext ctx) {
-        if(message.isGood()) {
-            EnumFacing facing = EnumFacing.NORTH;
-            IFireworkObject fireworkObject = message.getObject();
-            BlockPos pos = message.getBlockPos().add(0, fireworkObject.getObject().length * 5, 0);
+        if (message.isGood()) {
+            EnumFacing facing = message.getFacing();
+            FireworkObject fireworkObject = message.getObject();
+            BlockPos pos = message.getBlockPos().add(0, fireworkObject.getObjectArray().length * 5, 0);
 
-            for(String[] row : fireworkObject.getObject()){
-                pos = pos.add(0,-5, 0);
-                for(String s : row) {
-                    if(!s.equalsIgnoreCase(" ")) {
-                        for(String key: fireworkObject.getIdentifiers().keySet()) {
-                            if(SimpleFirework.getObjectParser().contains(key)) {
-                                FireworkParser.FireworkWrapper wrapper = SimpleFirework.getFireworkParser().getFireworkObjects().get(fireworkObject.getIdentifiers().get(key));
-                                BlockPos finalPos = pos;
-                                for (SimpleFireworkBase firework : wrapper.getFireworks()) {
-                                    firework.spawnFirework(finalPos, 0, 0, 0);
-                                }
-                            }else {
-                                SimpleFirework.LOG_HELPER.error("Firework is not there " + key);
-                            }
+            for (String[] row : fireworkObject.getObjectArray()) {
+                pos = pos.add(0, -5, 0);
+                for (String key : row) {
+                    String fireworkName = fireworkObject.getFireworkNameFormIdentifier(key);
+                    if(fireworkName != null) {
+                        if(SimpleFirework.getFireworkParser().getFireworkObjects().containsKey(fireworkName)) {
+                            FireworkParser.FireworkWrapper wrapper = SimpleFirework.getFireworkParser().getFireworkObjects().get(fireworkName);
+                            wrapper.spawnAllFireworks(pos, 0, 0, 0);
+                        }else {
+                            //Todo Better Message
+                            SimpleFirework.LOG_HELPER.error("Firework is not there " + fireworkName);
                         }
+                    } else {
+
+                        //Todo Better Message for when key is set but no identifer found
+                        SimpleFirework.LOG_HELPER.debug("No ");
                     }
                     pos = pos.add(facing.getFrontOffsetX() * 5, 0, facing.getFrontOffsetZ() * 5);
                 }
                 pos = pos.add(row.length * -5 * facing.getFrontOffsetX(), 0, row.length * -5 * facing.getFrontOffsetZ());
             }
-        }else {
+        } else {
             ctx.getClientHandler().handleChat(new SPacketChat(new TextComponentString("Error Test")));
         }
         return null;

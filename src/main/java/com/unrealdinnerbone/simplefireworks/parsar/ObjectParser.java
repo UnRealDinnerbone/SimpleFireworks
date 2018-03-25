@@ -2,24 +2,18 @@ package com.unrealdinnerbone.simplefireworks.parsar;
 
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
-import com.unrealdinnerbone.simplefireworks.SimpleFirework;
-import com.unrealdinnerbone.simplefireworks.api.firework.IFirework;
-import com.unrealdinnerbone.simplefireworks.api.firework.IFireworkObject;
-import com.unrealdinnerbone.simplefireworks.firework.SimpleFireworkBase;
-import com.unrealdinnerbone.simplefireworks.firework.SimpleFireworkObject;
+import com.unrealdinnerbone.simplefireworks.api.firework.FireworkObject;
 import org.apache.logging.log4j.Level;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class ObjectParser extends SimpleParser {
 
-    private List<IFireworkObject> fireworkObjects;
+    private List<FireworkObject> fireworkObjects;
     private Gson gson;
 
     public ObjectParser(File file) {
@@ -30,6 +24,7 @@ public class ObjectParser extends SimpleParser {
 
     @Override
     public void scan() {
+        this.fireworkObjects = new ArrayList<>();
         scanFolder(folder);
     }
 
@@ -40,8 +35,10 @@ public class ObjectParser extends SimpleParser {
             } else {
                 if (file.getName().endsWith(".json")) {
                     try {
+                        String name = file.getName().replace(".json", "");
                         JsonReader jsonReader = new JsonReader(new FileReader(file));
                         FireworkObjectWrapper objectWrapper = gson.fromJson(jsonReader, FireworkObjectWrapper.class);
+                        objectWrapper.fireworkObjects.forEach(object -> object.setId(name + ":" + object.getID()));
                         fireworkObjects.addAll(objectWrapper.getFireworkObjects());
                     } catch (FileNotFoundException e) {
                         log(Level.ERROR, e);
@@ -52,12 +49,12 @@ public class ObjectParser extends SimpleParser {
     }
 
 
-    public List<IFireworkObject> getFireworkObjects() {
+    public List<FireworkObject> getFireworkObjects() {
         return fireworkObjects;
     }
 
-    public IFireworkObject getFormName(String name) {
-        for(IFireworkObject object1: fireworkObjects) {
+    public FireworkObject getFormName(String name) {
+        for(FireworkObject object1: fireworkObjects) {
             if(object1.getID().equalsIgnoreCase(name)) {
                 return object1;
             }
@@ -71,9 +68,9 @@ public class ObjectParser extends SimpleParser {
 
     public static class FireworkObjectWrapper {
 
-        List<SimpleFireworkObject> fireworkObjects;
+        List<FireworkObject> fireworkObjects;
 
-        public List<SimpleFireworkObject> getFireworkObjects() {
+        public List<FireworkObject> getFireworkObjects() {
             return fireworkObjects;
         }
     }

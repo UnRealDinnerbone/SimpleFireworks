@@ -1,8 +1,9 @@
 package com.unrealdinnerbone.simplefireworks.lib;
 
+import com.unrealdinnerbone.simplefireworks.SimpleFirework;
 import com.unrealdinnerbone.simplefireworks.api.firework.*;
 import com.unrealdinnerbone.simplefireworks.config.FireworkConfig;
-import com.unrealdinnerbone.simplefireworks.firework.SimpleFireworkBase;
+import com.unrealdinnerbone.simplefireworks.api.firework.FireworkBase;
 import com.unrealdinnerbone.simplefireworks.network.NetworkManager;
 import com.unrealdinnerbone.simplefireworks.network.packet.PacketSpawnFirework;
 import com.unrealdinnerbone.simplefireworks.network.packet.local.PacketSpawnFireworkObject;
@@ -14,15 +15,15 @@ import java.util.List;
 
 public class FireworkHelper
 {
-    public static void spawnFireworkObject(String objectID, BlockPos pos, int dim, EnumExplodeEffect enumExplodeEffect, EnumFacing facing, List<Integer> colors, List<Integer> fadeColors, List<EnumFireworkEffect> effects) {
-        NetworkManager.INSTANCE.sendToAllAround(new PacketSpawnFirework(objectID, pos, enumExplodeEffect, facing, colors, fadeColors, effects), new NetworkRegistry.TargetPoint(dim, pos.getX(), pos.getY(), pos.getZ(), FireworkConfig.general.fireworkPacketRange));
+    public static void spawnFireworkObject(FireworkBase fireworkBase, BlockPos pos, EnumFacing facing, int dim) {
+        NetworkManager.INSTANCE.sendToAllAround(new PacketSpawnFirework(pos, fireworkBase, facing), new NetworkRegistry.TargetPoint(dim, pos.getX(), pos.getY(), pos.getZ(), FireworkConfig.fireworkPacketRange));
     }
-    public static void spawnFireworkObject(CharSequence objectName, BlockPos pos, int dim) {
-        NetworkManager.INSTANCE.sendToAllAround(new PacketSpawnFireworkObject(objectName, pos), new NetworkRegistry.TargetPoint(dim, pos.getX(), pos.getY(), pos.getZ(), FireworkConfig.general.fireworkPacketRange));
+    public static void spawnFireworkObject(CharSequence objectName, BlockPos pos, EnumFacing facing, int dim) {
+        NetworkManager.INSTANCE.sendToAllAround(new PacketSpawnFireworkObject(objectName, pos, facing), new NetworkRegistry.TargetPoint(dim, pos.getX(), pos.getY(), pos.getZ(), FireworkConfig.fireworkPacketRange));
     }
 
-    public static IFirework getRandom(int maxColors, int maxFadeColors) {
-        SimpleFireworkBase firework = new SimpleFireworkBase();
+    public static FireworkBase getRandom(int maxColors, int maxFadeColors) {
+        FireworkBase firework = new FireworkBase();
         for (int i1 = 0; i1 < MathHelper.getRandomInt(1, maxColors); i1++) {
             firework.addColor(MathHelper.getRandomHexColor());
         }

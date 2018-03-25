@@ -2,8 +2,8 @@ package com.unrealdinnerbone.simplefireworks.parsar;
 
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
-import com.unrealdinnerbone.simplefireworks.api.firework.IFirework;
-import com.unrealdinnerbone.simplefireworks.firework.SimpleFireworkBase;
+import com.unrealdinnerbone.simplefireworks.api.firework.FireworkBase;
+import net.minecraft.util.math.BlockPos;
 import org.apache.logging.log4j.Level;
 
 import java.io.File;
@@ -26,6 +26,7 @@ public class FireworkParser extends SimpleParser
 
     @Override
     public void scan() {
+        this.fireworkObjects = new HashMap<>();
         scanFolder(folder);
     }
 
@@ -53,10 +54,14 @@ public class FireworkParser extends SimpleParser
 
     public static class FireworkWrapper {
 
-        List<SimpleFireworkBase> fireworks;
+        List<FireworkBase> fireworks;
 
-        public List<SimpleFireworkBase> getFireworks() {
+        public List<FireworkBase> getFireworks() {
             return fireworks;
+        }
+
+        public void spawnAllFireworks(BlockPos pos, int xSpeed, int ySpeed, int zSpeed) {
+            fireworks.forEach(firework -> firework.spawnFirework(pos, xSpeed, ySpeed, zSpeed));
         }
     }
 }

@@ -9,22 +9,14 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 
-@Config(modid = Reference.MOD_ID)
+@Config(modid = Reference.MOD_ID, name = Reference.MOD_ID + "/" + Reference.MOD_ID)
 @Config.LangKey(Reference.MOD_ID + ".config.title")
 @Mod.EventBusSubscriber(modid = Reference.MOD_ID)
 public class FireworkConfig {
 
-    public static final General general = new General();
 
-    public static class General {
-
-        @Config.Comment("Range to send packet of display fireworks")
-        public int fireworkPacketRange = 64;
-
-        @Config.Comment("Temp Config to define explode type")
-        public EnumExplodeEffect enumExplodeEffect = EnumExplodeEffect.SMALL_BALL;
-
-    }
+    @Config.Comment("Range to send packet of display fireworks")
+    public static int fireworkPacketRange = 64;
 
 
     @SubscribeEvent
