@@ -1,6 +1,7 @@
 package com.unrealdinnerbone.simplefireworks;
 
 import com.unrealdinnerbone.simplefireworks.command.CommandFireworkTree;
+import com.unrealdinnerbone.simplefireworks.firework.JsonMaker;
 import com.unrealdinnerbone.simplefireworks.lib.LogHelper;
 import com.unrealdinnerbone.simplefireworks.lib.Reference;
 import com.unrealdinnerbone.simplefireworks.network.NetworkManager;
@@ -44,10 +45,12 @@ public class SimpleFirework {
         File fireworksFolder = new File(configFolder, "fireworks");
         if (!fireworksFolder.exists()) {
             fireworksFolder.mkdir();
+            JsonMaker.makeBaseFireworkFile(fireworksFolder);
         }
         File objectsFolder = new File(configFolder, "objects");
         if (!objectsFolder.exists()) {
             objectsFolder.mkdir();
+            JsonMaker.makeBaseJsonForObjects(objectsFolder);
         }
 
         fireworkParser = new FireworkParser(fireworksFolder);
