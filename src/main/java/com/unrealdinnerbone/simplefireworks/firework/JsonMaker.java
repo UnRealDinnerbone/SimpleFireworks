@@ -1,10 +1,12 @@
 package com.unrealdinnerbone.simplefireworks.firework;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.unrealdinnerbone.simplefireworks.api.firework.EnumExplodeEffect;
 import com.unrealdinnerbone.simplefireworks.api.firework.EnumFireworkEffect;
 import com.unrealdinnerbone.simplefireworks.api.firework.FireworkBase;
 import com.unrealdinnerbone.simplefireworks.api.firework.FireworkObject;
+import com.unrealdinnerbone.simplefireworks.lib.FileHelper;
 import com.unrealdinnerbone.simplefireworks.lib.Reference;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -19,7 +21,7 @@ import java.util.List;
 
 public class JsonMaker
 {
-    public static Gson gson = new Gson();
+    public static Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
 
 
@@ -37,13 +39,8 @@ public class JsonMaker
             objectWrapper.fireworkObjects.add(object);
         }
         File letters = new File(file, "letters.json");
-        Writer writer = null;
-        try {
-            writer = new FileWriter(letters);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        gson.toJson(objectWrapper, FireworkObjectWrapper.class, writer);
+        String json = gson.toJson(objectWrapper, FireworkObjectWrapper.class);
+        FileHelper.writeStringToFile(json, letters);
     }
 
     public static void makeBaseFireworkFile(File file) {
@@ -54,22 +51,10 @@ public class JsonMaker
         base.setFadeColors(whiteList);
         base.setColors(whiteList);
         base.setExplodeEffect(EnumExplodeEffect.SMALL_BALL);
-        File letters = new File(file, "white.json");
-        if(!letters.exists()) {
-            try {
-                letters.createNewFile();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
+        File white = new File(file, "white.json");
         fireworkWrapper.fireworks.add(base);
-        Writer writer = null;
-        try {
-            writer = new FileWriter(letters);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        gson.toJson(fireworkWrapper, FireworkWrapper.class, writer);
+        String json = gson.toJson(fireworkWrapper, FireworkWrapper.class);
+        FileHelper.writeStringToFile(json, white);
     }
 
 
