@@ -1,5 +1,7 @@
 
-## Beta-1.0.0
+## Beta-1.1.0
 <ul>
-<li>First Beta</li>
+<li>Let There Be Configs</li>
+<li>Fireworks And Firework Objects and now json files</li>
+<li>-Removed FTB Lettes and Command (Add The Letter(Color Parts Your Self now)</li>
 </ul>

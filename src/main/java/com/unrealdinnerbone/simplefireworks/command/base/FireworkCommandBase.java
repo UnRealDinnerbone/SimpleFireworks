@@ -1,11 +1,14 @@
-package com.unrealdinnerbone.simplefireworks.command;
+package com.unrealdinnerbone.simplefireworks.command.base;
 
+import com.unrealdinnerbone.simplefireworks.lib.EnumUtil;
 import com.unrealdinnerbone.simplefireworks.lib.Reference;
 import net.minecraft.command.CommandBase;
+import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.NumberInvalidException;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.CommandBlockBaseLogic;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.TextComponentString;
@@ -38,4 +41,16 @@ public abstract class FireworkCommandBase extends CommandBase {
         return new BlockPos(parseDouble(base.x, args[xSpot], true), parseDouble(base.y, args[xSpot + 1], true), parseDouble(base.z, args[xSpot + 2], true));
     }
 
+    @Override
+    public int getRequiredPermissionLevel() {
+        return 2;
+    }
+
+    public EnumFacing parseFacing(String name) throws CommandException {
+        EnumFacing facing = EnumFacing.byName(name);
+        if(facing == null) {
+            throw new CommandException(name + " is not an EnumFacing");
+        }
+        return facing;
+    }
 }
