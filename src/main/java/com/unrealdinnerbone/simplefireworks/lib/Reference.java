@@ -1,8 +1,6 @@
 package com.unrealdinnerbone.simplefireworks.lib;
 
-
-public class Reference
-{
+public class Reference {
     public static final String MOD_ID = "simplefireworks";
     public static final String MOD_NAME = "SimpleFireworks";
     public static final String VERSION = "1.1.0";
