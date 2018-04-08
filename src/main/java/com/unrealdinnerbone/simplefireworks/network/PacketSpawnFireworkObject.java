@@ -1,17 +1,80 @@
-package com.unrealdinnerbone.simplefireworks.network.packet.local;
+package com.unrealdinnerbone.simplefireworks.network;
 
 import com.unrealdinnerbone.simplefireworks.SimpleFirework;
-import com.unrealdinnerbone.simplefireworks.api.firework.FireworkObject;
 import com.unrealdinnerbone.simplefireworks.parsar.FireworkParser;
+import com.unrealdinnerbone.yaum.api.firework.FireworkObject;
+import com.unrealdinnerbone.yaum.api.network.ISimplePacket;
+import com.unrealdinnerbone.yaum.libs.utils.FacingUtil;
+import io.netty.buffer.ByteBuf;
 import net.minecraft.network.play.server.SPacketChat;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
-public class PacketSpawnFireworkObjectHandler implements IMessageHandler<PacketSpawnFireworkObject, IMessage> {
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+
+public class PacketSpawnFireworkObject implements ISimplePacket<PacketSpawnFireworkObject> {
+
+    private CharSequence charSequence;
+    private BlockPos blockPos;
+    private EnumFacing facing;
+
+    private boolean isGood;
+    private FireworkObject object;
+
+    public PacketSpawnFireworkObject() {
+
+    }
+
+
+    public PacketSpawnFireworkObject(CharSequence objectName, BlockPos pos, EnumFacing facing) {
+        this.charSequence = objectName;
+        this.blockPos = pos;
+        this.facing = facing;
+    }
+
+    @Override
+    public void fromBytes(ByteBuf buf) {
+        int length = buf.readInt();
+        charSequence = buf.readCharSequence(length, StandardCharsets.UTF_8);
+        for (FireworkObject fireworkObject : SimpleFirework.getObjectParser().getFireworkObjects()) {
+            if (fireworkObject.getID().equalsIgnoreCase(String.valueOf(charSequence))) {
+                this.object = fireworkObject;
+            }
+        }
+        isGood = object != null;
+        this.blockPos = new BlockPos(buf.readInt(),buf.readInt(),buf.readInt());
+        this.facing = FacingUtil.getFacingFormID(buf.readInt());
+    }
+
+    @Override
+    public void toBytes(ByteBuf buf) {
+        buf.writeInt(charSequence.length());
+        buf.writeCharSequence(charSequence, StandardCharsets.UTF_8);
+        buf.writeInt(blockPos.getX());
+        buf.writeInt(blockPos.getY());
+        buf.writeInt(blockPos.getZ());
+        buf.writeInt(facing.getIndex());
+    }
+
+    public BlockPos getBlockPos() {
+        return blockPos;
+    }
+
+    public FireworkObject getObject() {
+        return object;
+    }
+
+    public boolean isGood() {
+        return isGood;
+    }
+
+    public EnumFacing getFacing() {
+        return facing;
+    }
 
     @Override
     public IMessage onMessage(PacketSpawnFireworkObject message, MessageContext ctx) {

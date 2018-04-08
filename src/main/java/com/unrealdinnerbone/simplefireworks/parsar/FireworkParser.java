@@ -2,7 +2,7 @@ package com.unrealdinnerbone.simplefireworks.parsar;
 
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
-import com.unrealdinnerbone.simplefireworks.api.firework.FireworkBase;
+import com.unrealdinnerbone.yaum.api.firework.FireworkBase;
 import net.minecraft.util.math.BlockPos;
 import org.apache.logging.log4j.Level;
 

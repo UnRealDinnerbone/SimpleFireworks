@@ -2,7 +2,7 @@ package com.unrealdinnerbone.simplefireworks.parsar;
 
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
-import com.unrealdinnerbone.simplefireworks.api.firework.FireworkObject;
+import com.unrealdinnerbone.yaum.api.firework.FireworkObject;
 import org.apache.logging.log4j.Level;
 
 import java.io.File;

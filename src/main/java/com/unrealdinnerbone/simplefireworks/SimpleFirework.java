@@ -2,19 +2,15 @@ package com.unrealdinnerbone.simplefireworks;
 
 import com.unrealdinnerbone.simplefireworks.command.CommandFireworkTree;
 import com.unrealdinnerbone.simplefireworks.firework.JsonMaker;
-import com.unrealdinnerbone.simplefireworks.lib.LogHelper;
 import com.unrealdinnerbone.simplefireworks.lib.Reference;
-import com.unrealdinnerbone.simplefireworks.network.NetworkManager;
-import com.unrealdinnerbone.simplefireworks.network.packet.PacketSpawnFireworkHandler;
-import com.unrealdinnerbone.simplefireworks.network.packet.PacketSpawnFirework;
-import com.unrealdinnerbone.simplefireworks.network.packet.local.PacketSpawnFireworkObject;
-import com.unrealdinnerbone.simplefireworks.network.packet.local.PacketSpawnFireworkObjectHandler;
 import com.unrealdinnerbone.simplefireworks.parsar.FireworkParser;
 import com.unrealdinnerbone.simplefireworks.parsar.ObjectParser;
+import com.unrealdinnerbone.yaum.api.IYaumMod;
+import com.unrealdinnerbone.yaum.api.util.LangHelper;
+import com.unrealdinnerbone.yaum.api.util.LogHelper;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
-import net.minecraftforge.fml.relauncher.Side;
 
 import java.io.File;
 
@@ -26,7 +22,7 @@ import java.io.File;
         acceptedMinecraftVersions = Reference.MC_VERSION,
         guiFactory = Reference.GUI_FACTORY_CLASS
     )
-public class SimpleFirework {
+public class SimpleFirework implements IYaumMod {
 
     @Mod.Instance(Reference.MOD_ID)
     public static SimpleFirework instance;
@@ -60,15 +56,11 @@ public class SimpleFirework {
         objectParser.scan();
 
 
-        NetworkManager.INSTANCE.registerMessage(PacketSpawnFireworkHandler.class, PacketSpawnFirework.class, 0, Side.CLIENT);
-        NetworkManager.INSTANCE.registerMessage(PacketSpawnFireworkObjectHandler.class, PacketSpawnFireworkObject.class, 1, Side.CLIENT);
     }
 
     @Mod.EventHandler
     public static void onServerStart(FMLServerStartingEvent event) {
         event.registerServerCommand(new CommandFireworkTree());
-//        event.registerServerCommand(new CommandSpawnFTBLogo());
-//        event.registerServerCommand(new CommandSpawnLetter());
     }
 
     public static FireworkParser getFireworkParser() {
@@ -77,5 +69,20 @@ public class SimpleFirework {
 
     public static ObjectParser getObjectParser() {
         return objectParser;
+    }
+
+    @Override
+    public String getModName() {
+        return Reference.MOD_ID;
+    }
+
+    @Override
+    public LogHelper getLogHelper() {
+        return null;
+    }
+
+    @Override
+    public LangHelper getLangHelper() {
+        return null;
     }
 }

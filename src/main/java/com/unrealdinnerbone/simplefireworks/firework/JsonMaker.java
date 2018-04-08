@@ -2,19 +2,12 @@ package com.unrealdinnerbone.simplefireworks.firework;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.unrealdinnerbone.simplefireworks.api.firework.EnumExplodeEffect;
-import com.unrealdinnerbone.simplefireworks.api.firework.EnumFireworkEffect;
-import com.unrealdinnerbone.simplefireworks.api.firework.FireworkBase;
-import com.unrealdinnerbone.simplefireworks.api.firework.FireworkObject;
-import com.unrealdinnerbone.simplefireworks.lib.FileHelper;
-import com.unrealdinnerbone.simplefireworks.lib.Reference;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
+import com.unrealdinnerbone.yaum.api.firework.EnumExplodeEffect;
+import com.unrealdinnerbone.yaum.api.firework.FireworkBase;
+import com.unrealdinnerbone.yaum.api.firework.FireworkObject;
+import com.unrealdinnerbone.yaum.libs.helpers.FileHelper;
 
 import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.Writer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -24,14 +17,41 @@ public class JsonMaker
     public static Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
 
-
+    public static final String[][][] ALL = {
+            FireworkLetter.A,
+            FireworkLetter.B,
+            FireworkLetter.C,
+            FireworkLetter.D,
+            FireworkLetter.E,
+            FireworkLetter.F,
+            FireworkLetter.G,
+            FireworkLetter.H,
+            FireworkLetter.I,
+            FireworkLetter.J,
+            FireworkLetter.K,
+            FireworkLetter.L,
+            FireworkLetter.M,
+            FireworkLetter.N,
+            FireworkLetter.O,
+            FireworkLetter.P,
+            FireworkLetter.Q,
+            FireworkLetter.R,
+            FireworkLetter.S,
+            FireworkLetter.T,
+            FireworkLetter.U,
+            FireworkLetter.V,
+            FireworkLetter.W,
+            FireworkLetter.X,
+            FireworkLetter.Y,
+            FireworkLetter.Z,
+    };
 
     public static void makeBaseJsonForObjects(File file)  {
         FireworkObjectWrapper objectWrapper = new FireworkObjectWrapper();
         HashMap<String, String> stringStringHashMap = new HashMap<>();
         stringStringHashMap.put("W", "white");
         char letter = 'A';
-        for (String[][] array : FireworkLetter2.ALL) {
+        for (String[][] array : ALL) {
             FireworkObject object = new FireworkObject();
             object.setIdentifiers(stringStringHashMap);
             object.setId(String.valueOf(letter++));

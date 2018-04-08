@@ -32,6 +32,10 @@ minecraft {
     useDepAts = true
 }
 
+dependencies {
+    files "libs/yaum-1.12.2-4.1.0-universal.jar"
+}
+
 processResources
 {
 	inputs.property "version", project.version
@@ -60,6 +64,9 @@ curseforge {
 		releaseType = project.release_type
 		mainArtifact(jar) {
             displayName = "${mod_name}-${minecraft_version}-${mod_verison}-universal"
+            relations {
+                requiredLibrary 'yaum-yet-another-util-mod'
+            }
         }
     }
 }

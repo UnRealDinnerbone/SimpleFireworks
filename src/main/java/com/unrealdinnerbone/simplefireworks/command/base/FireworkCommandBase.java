@@ -1,6 +1,5 @@
 package com.unrealdinnerbone.simplefireworks.command.base;
 
-import com.unrealdinnerbone.simplefireworks.lib.EnumUtil;
 import com.unrealdinnerbone.simplefireworks.lib.Reference;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
