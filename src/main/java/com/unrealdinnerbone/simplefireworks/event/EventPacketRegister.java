@@ -12,6 +12,6 @@ public class EventPacketRegister
 {
     @SubscribeEvent
     public static void registerPackets(PacketRegisterEvent event) {
-        event.registerMessage(PacketSpawnFireworkObject.class, PacketSpawnFireworkObject.class, Side.CLIENT);
+        event.registerMessage(PacketSpawnFireworkObject.class, Side.CLIENT);
     }
 }

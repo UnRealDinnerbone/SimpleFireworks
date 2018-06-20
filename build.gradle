@@ -32,8 +32,25 @@ minecraft {
     useDepAts = true
 }
 
+repositories {
+    maven {
+        name = "tterrag maven"
+        url = "http://maven.tterrag.com/"
+    }
+    maven {
+        name = "CoFH Maven"
+        url = "http://maven.covers1624.net"
+    }
+}
+
+
 dependencies {
-    files "libs/yaum-1.12.2-4.1.0-universal.jar"
+	try {
+		compile project(":Yaum")
+	} catch (Exception ignored) {
+		files "libs/yaum-1.12.2-4.1.0-universal.jar"
+	}
+
 }
 
 processResources
@@ -50,7 +67,6 @@ processResources
 	{
 		exclude 'mcmod.info'
 	}
-	rename '(.+_at.cfg)', 'META-INF/$1'
 }
 
 

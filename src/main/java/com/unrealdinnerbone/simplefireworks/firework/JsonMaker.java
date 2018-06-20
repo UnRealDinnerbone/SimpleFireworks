@@ -60,7 +60,7 @@ public class JsonMaker
         }
         File letters = new File(file, "letters.json");
         String json = gson.toJson(objectWrapper, FireworkObjectWrapper.class);
-        FileHelper.writeStringToFile(json, letters);
+        FileHelper.writeStringToFile(json, letters, true);
     }
 
     public static void makeBaseFireworkFile(File file) {
@@ -74,7 +74,7 @@ public class JsonMaker
         File white = new File(file, "white.json");
         fireworkWrapper.fireworks.add(base);
         String json = gson.toJson(fireworkWrapper, FireworkWrapper.class);
-        FileHelper.writeStringToFile(json, white);
+        FileHelper.writeStringToFile(json, white, true);
     }
 
 

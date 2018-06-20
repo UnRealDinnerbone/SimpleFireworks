@@ -1,7 +1,7 @@
 package com.unrealdinnerbone.simplefireworks.lib;
 
 import com.unrealdinnerbone.simplefireworks.network.PacketSpawnFireworkObject;
-import com.unrealdinnerbone.yaum.network.PacketHandler;
+import com.unrealdinnerbone.yaum.common.network.PacketHandler;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
